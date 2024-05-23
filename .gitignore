@@ -67,3 +67,7 @@ yarn-error.log
 .pnp.js
 # Yarn Integrity file
 .yarn-integrity
+
+# Solutions
+**/*_sol.txt
+**/*_sol.csv
