@@ -16,3 +16,5 @@ P,34.3
 ```
 
 You need to find the patient with the longest average QT interval.
+
+[Download the dataset](https://github.com/stmball/dimen-ctf/raw/main/question_generation/heartbeat_hero_data.zip)
