@@ -12,7 +12,7 @@ import numpy as np
 from scipy import stats
 
 
-def expression_expedition_q():
+def expression_expedition():
 
     # Load the data
     data = pd.read_csv("./genes.csv")
@@ -45,9 +45,6 @@ def expression_expedition_q():
     with open("./expression_expedition_val_sol.txt", "w") as f:
         f.write("\n".join(genes.tolist()))
 
-
-def expression_expedition_sol():
-
     data = pd.read_csv("./expression_expedition_data.csv")
 
     log_data = np.log2(data.iloc[:, 1:])
@@ -60,7 +57,7 @@ def expression_expedition_sol():
     results["abs_lfc"] = np.abs(results["LFC"])
 
 
-def heartbeat_hero_q():
+def heartbeat_hero():
 
     fak = faker.Faker()
     data_folder = Path("./heartbeat_hero_data")
@@ -95,11 +92,132 @@ def heartbeat_hero_q():
     with open("./heartbeat_hero_sol.txt", "w") as f:
         f.write(qts["Name"].values[0])
 
-    print(mean_qts)
+
+def monkey_masses():
+    """
+    Generate data for the Monkey Masses question
+    """
+    mean_1 = np.random.uniform(10, 30)
+    mean_2 = np.random.uniform(10, 30)
+
+    if mean_1 > mean_2:
+        mean_1, mean_2 = mean_2, mean_1
+
+    std_1 = np.random.uniform(1, 2)
+    std_2 = np.random.uniform(1, 2)
+
+    inactive_monkeys = np.random.normal(mean_1, std_1, 100)
+    active_monkeys = np.random.normal(mean_2, std_2, 100)
+
+    data = pd.DataFrame({"gym_provided": active_monkeys, "no_gym": inactive_monkeys})
+
+    data.to_csv("./monkey_masses.csv")
+
+    # Solution
+    pval = stats.ttest_ind(active_monkeys, inactive_monkeys)[1]
+
+    with open("./monkey_masses_sol.txt", "w") as f:
+        f.write(pval)
+
+
+def sugar_squeeze_pt1():
+
+    means = np.random.uniform(70, 150, 5)
+
+    data = np.random.normal(means, 10, (5, 100))
+
+    data = pd.DataFrame(data, columns=[f"Group {i+ 1}" for i in range(5)])
+
+    data.to_csv("./sugar_squeeze_pt1.csv")
+
+    pval = stats.f_oneway(data.values)[1]
+
+    with open("./sugar_squeeze_pt1_sol.txt", "w") as f:
+        f.write(pval)
+
+
+def sugar_squeeze_pt2():
+
+    means = np.random.uniform(70, 150, 25)
+
+    data = np.random.normal(means, 10, (25, 100))
+
+    sucrose_groups = [f"Group {(i % 5) + 1}" for i in range(25)]
+    fructose_groups = [f"Group {(i // 5) + 1}" for i in range(25)]
+
+    master_data = []
+    for idx, (g1, g2) in enumerate(zip(sucrose_groups, fructose_groups)):
+        for point in data[idx]:
+            master_data.append([g1, g2, point])
+
+    data = pd.DataFrame(
+        master_data, columns=["Sucrose Group", "Fructose Group", "Weight (kg)"]
+    )
+
+    data.to_csv("./sugar_squeeze_pt2.csv")
+
+    # TODO: Check the p-value calculation two way please!
+    pval = stats.f_oneway(data.values)[1]
+
+    with open("./sugar_squeeze_pt2_sol.txt", "w") as f:
+        f.write(pval)
+
+
+def drunk_dilemma():
+
+    values = np.random.uniform(0, 100, (2, 2))
+
+    data = pd.DataFrame(
+        values, columns=["Sober", "Drinks"], index=["No Drugs", "Drugs"]
+    )
+
+    data.to_csv("./drunk_dilemma.csv")
+
+    # Chi squared contigency table test
+    pval = stats.fisher_exact(values)[1]
+
+    with open("./drunk_dilemma_sol.txt", "w") as f:
+        f.write(pval)
+
+
+def nebulous_nucleotides():
+
+    fak = faker.Faker()
+
+    data_folder = Path("./nebulous_nucleotides")
+
+    # Delete folder if it exists
+    if data_folder.exists():
+        shutil.rmtree(data_folder)
+
+    best_name = ""
+    best_count = 0
+
+    for i in range(10):
+        name = fak.name()
+
+        string = np.random.choice(["A", "C", "G", "T"], 1000)
+        string = "".join(string)
+
+        count = string.count("ACGTGCA")
+        if best_count < count:
+            best_count = count
+            best_name = name
+
+        with open(f"./nebulous_nucleotides/{name}.txt", "w") as f:
+            f.write(string)
+
+    # Zip heartbeat folder
+    shutil.make_archive("./nebulous_nucleotides", "zip", data_folder)
+
+    with open("./nebulous_nucleotides_sol.txt", "w") as f:
+        f.write(best_name)
 
 
 if __name__ == "__main__":
-    # expression_expedition_q()
-    # expression_expedition_sol()
-
-    heartbeat_hero_q()
+    expression_expedition()
+    heartbeat_hero()
+    monkey_masses()
+    sugar_squeeze_pt1()
+    sugar_squeeze_pt2()
+    drunk_dilemma()
