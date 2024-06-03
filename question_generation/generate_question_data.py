@@ -10,6 +10,8 @@ import pandas as pd
 import faker
 import numpy as np
 from scipy import stats
+from statsmodles.formula.api import ols
+import statsmodels as sm
 
 
 def expression_expedition():
@@ -156,11 +158,15 @@ def sugar_squeeze_pt2():
 
     data.to_csv("./sugar_squeeze_pt2.csv")
 
-    # TODO: Check the p-value calculation two way please!
-    pval = stats.f_oneway(data.values)[1]
+    lm = ols(
+        "Weight ~ C(Sucrose_Group) * C(Fructose_Group) + C(Sucrose_Group):C(Fructose_Group)",
+        data,
+    ).fit()
 
-    with open("./sugar_squeeze_pt2_sol.txt", "w") as f:
-        f.write(pval)
+    table = sm.stats.anova_lm(lm, typ=2)
+
+    # Table to text
+    table.to_csv("./sugar_squeeze_pt2_sol.txt", sep="\t")
 
 
 def drunk_dilemma():
@@ -214,6 +220,24 @@ def nebulous_nucleotides():
         f.write(best_name)
 
 
+def performance_pulse():
+
+    x = np.random.uniform(5, 40, 100)
+    m = np.random.uniform(1, 2)
+    c = np.random.uniform(130, 140)
+    y = m * x + c + np.random.normal(0, 10, 100)
+
+    data = pd.DataFrame({"Speed (mph)": x, "Heart Rate": y})
+
+    data.to_csv("./performance_pulse.csv")
+
+    # Solution
+    m, c, r, p, se = stats.linregress(x, y)
+
+    with open("./performance_pulse_sol.txt", "w") as f:
+        f.write(f"P-value: {p}")
+
+
 if __name__ == "__main__":
     expression_expedition()
     heartbeat_hero()
@@ -222,3 +246,4 @@ if __name__ == "__main__":
     sugar_squeeze_pt2()
     drunk_dilemma()
     nebulous_nucleotides()
+    performance_pulse()

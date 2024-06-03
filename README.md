@@ -20,7 +20,7 @@ Questions can be found in the `content/blog` - each question has a corresponding
 - [x] One-way ANOVA
 - [x] Two-way ANOVA
 - [x] Chi Squared Contingency Table
-- [ ] Linear Regression
+- [x] Linear Regression
 - [ ] Normality Test
 - [ ] Kolmogorov-Smirnov Test
 
