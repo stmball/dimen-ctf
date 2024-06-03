@@ -253,6 +253,29 @@ def tricky_tests():
         f.write(f"P-value: {pval}")
 
 
+def response_riddle():
+
+    x = np.random.normal(0, 1, 1000)
+    y = np.random.lognormal(0, 1, 1000)
+
+    data = pd.DataFrame({"Control": x, "Drug Positive": y})
+
+    data.to_csv("./response_riddle.csv")
+
+    # Solution
+    # KS test
+    ks_pval = stats.ks_2samp(x, y)[1]
+
+    with open("./response_riddle_sol.txt", "w") as f:
+        f.write(f"KS P-value: {ks_pval}")
+
+def wicked_westerns():
+
+    # Generate fake western data
+    
+
+    # Solution
+
 if __name__ == "__main__":
     expression_expedition()
     heartbeat_hero()
@@ -263,3 +286,4 @@ if __name__ == "__main__":
     nebulous_nucleotides()
     performance_pulse()
     tricky_tests()
+

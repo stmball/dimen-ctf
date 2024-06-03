@@ -21,10 +21,10 @@ Questions can be found in the `content/blog` - each question has a corresponding
 - [x] Two-way ANOVA
 - [x] Chi Squared Contingency Table
 - [x] Linear Regression
-- [ ] Normality Test
-- [ ] Kolmogorov-Smirnov Test
+- [x] Normality Test
+- [x] Kolmogorov-Smirnov Test
 
-### Bioinfomatics
+### Bioinformatics
 
 - [x] Differential Expression Analysis
 - [x] ECG Signal Analysis
