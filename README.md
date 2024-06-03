@@ -10,6 +10,32 @@ To run the site locally, clone the repository and run the following command:
 npm run develop
 ```
 
-Questions can be found in the `content/blog` - each question has a corresponding function in `quesiton_generation` that is used to generate the question and solution for the problem.
+Questions can be found in the `content/blog` - each question has a corresponding function in `question` that is used to generate the question and solution for the problem.
 
-## TODOs:
+## Questions:
+
+### Statistics
+
+- [x] T-test
+- [x] One-way ANOVA
+- [x] Two-way ANOVA
+- [x] Chi Squared Contingency Table
+- [ ] Linear Regression
+- [ ] Normality Test
+- [ ] Kolmogorov-Smirnov Test
+
+### Bioinfomatics
+
+- [x] Differential Expression Analysis
+- [x] ECG Signal Analysis
+- [x] ATCG Sequence Analysis
+- [ ] Western Blot Analysis
+- [ ] Delta-delta CT Analysis
+
+### Miscellaneous
+
+- [ ] Survey Response Analysis
+- [ ] Curve Fitting
+- [ ] Standard Curve Cone Analysis
+- [ ] Serial Dilution Calculator
+- [ ] Hyper Ratiometric Analysis
