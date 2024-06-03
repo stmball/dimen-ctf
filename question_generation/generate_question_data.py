@@ -238,6 +238,21 @@ def performance_pulse():
         f.write(f"P-value: {p}")
 
 
+def tricky_tests():
+
+    x = np.random.exponential(5, 1000)
+
+    data = pd.DataFrame({"Time (s)": x})
+
+    data.to_csv("./tricky_tests.csv")
+
+    # Solution
+    pval = stats.shapiro(x)[1]
+
+    with open("./tricky_tests_sol.txt", "w") as f:
+        f.write(f"P-value: {pval}")
+
+
 if __name__ == "__main__":
     expression_expedition()
     heartbeat_hero()
@@ -247,3 +262,4 @@ if __name__ == "__main__":
     drunk_dilemma()
     nebulous_nucleotides()
     performance_pulse()
+    tricky_tests()
