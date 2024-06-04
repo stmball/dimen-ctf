@@ -298,6 +298,29 @@ def wicked_westerns():
     data_df.to_csv("wicked_westerns.csv")
 
 
+def difficult_deltas():
+
+    g1 = np.random.normal(30, 2, (5, 5))
+    g2 = np.random.normal(31, 2, (5, 5))
+    g3 = np.random.normal(30, 2, (5, 5))
+    g4 = np.random.normal(50, 2, (5, 5))
+
+    alldata = np.vstack([np.hstack([g1, g2]), np.hstack([g3, g4])])
+
+    columns = [f"Houskeeping {idx + 1}" for idx in range(5)] + [
+        f"Gene of interest {idx + 1}" for idx in range(5)
+    ]
+    index = [f"Control {idx + 1}" for idx in range(5)] + [
+        f"Treated {idx + 1}" for idx in range(5)
+    ]
+
+    data = pd.DataFrame(alldata, index=index, columns=columns)
+
+    data.tocsv("./difficult_deltas.csv")
+
+    # TODO: Solution
+
+
 if __name__ == "__main__":
     expression_expedition()
     heartbeat_hero()
