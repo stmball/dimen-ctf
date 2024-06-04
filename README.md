@@ -29,7 +29,7 @@ Questions can be found in the `content/blog` - each question has a corresponding
 - [x] Differential Expression Analysis
 - [x] ECG Signal Analysis
 - [x] ATCG Sequence Analysis
-- [ ] Western Blot Analysis
+- [x] Western Blot Analysis
 - [ ] Delta-delta CT Analysis
 
 ### Miscellaneous

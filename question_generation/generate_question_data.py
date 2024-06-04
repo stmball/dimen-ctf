@@ -5,6 +5,7 @@
 """
 
 from pathlib import Path
+import random
 import shutil
 import pandas as pd
 import faker
@@ -269,12 +270,33 @@ def response_riddle():
     with open("./response_riddle_sol.txt", "w") as f:
         f.write(f"KS P-value: {ks_pval}")
 
+
 def wicked_westerns():
 
     # Generate fake western data
-    
+    ladder = range(50, 250, 10)
+    points = np.random.choice(ladder).tolist()
+    question_gene = "PRDX"
 
-    # Solution
+    other_genes = np.random.choice(pd.read_csv("./genes.csv").to_numpy().flatten(), 9)
+    housekeeper = 20
+    names = random.shuffle(other_genes.tolist().append(question_gene))
+    values = [housekeeper] + points
+
+    data = []
+    housekeeper_values = np.random.normal(200, 20, 20)
+    control_values = np.random.normal(np.random.uniform(10, 100), 20, (10, 10))
+    upreg_values = np.random.normal(np.random.uniform(100, 150), 20, (10, 10))
+
+    all_values = np.hstack([control_values, upreg_values])
+    all_values = np.vstack([housekeeper_values, all_values])
+
+    all_values = {f"Cell {idx}": all_values[idx] for idx in range(20)}
+
+    data_df = pd.DataFrame({"Gene": names, "Weights": values, **all_values})
+
+    data_df.to_csv("wicked_westerns.csv")
+
 
 if __name__ == "__main__":
     expression_expedition()
@@ -286,4 +308,5 @@ if __name__ == "__main__":
     nebulous_nucleotides()
     performance_pulse()
     tricky_tests()
-
+    response_riddle()
+    wicked_westerns()
