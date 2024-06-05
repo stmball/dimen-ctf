@@ -297,6 +297,18 @@ def wicked_westerns():
 
     data_df.to_csv("wicked_westerns.csv")
 
+    # TODO: Solution
+    prdx = data_df.loc[data_df["Gene"] == "PRDX"].to_numpy()
+    housekeeper = data_df.loc[data_df["Gene"] == "Housekeeper"].to_numpy()
+
+    ratio = prdx / housekeeper
+
+    mean_control_ratio = ratio[:5].mean()
+    mean_treated_ratio = ratio[5:].mean()
+
+    with open("./wicked_westerns", "w") as f:
+        f.write(f"{mean_treated_ratio/mean_control_ratio}")
+
 
 def difficult_deltas():
 
@@ -307,7 +319,7 @@ def difficult_deltas():
 
     alldata = np.vstack([np.hstack([g1, g2]), np.hstack([g3, g4])])
 
-    columns = [f"Houskeeping {idx + 1}" for idx in range(5)] + [
+    columns = [f"Housekeeping {idx + 1}" for idx in range(5)] + [
         f"Gene of interest {idx + 1}" for idx in range(5)
     ]
     index = [f"Control {idx + 1}" for idx in range(5)] + [
@@ -318,7 +330,20 @@ def difficult_deltas():
 
     data.tocsv("./difficult_deltas.csv")
 
-    # TODO: Solution
+    g1_means = g1.mean(axis=0)
+    g2_means = g2.mean(axis=0)
+    g3_means = g3.mean(axis=0)
+    g4_means = g4.mean(axis=0)
+
+    g12_delta = g1_means - g2_means
+    g34_delta = g3_means - g4_means
+
+    g12_delta_mean = g12_delta.mean()
+    g34_dd_ct = g34_delta - g12_delta_mean
+    g34_dd_mean_ct = g34_dd_ct.mean()
+
+    with open("./difficult_deltas.txt", "w") as f:
+        f.write(g34_dd_mean_ct)
 
 
 if __name__ == "__main__":

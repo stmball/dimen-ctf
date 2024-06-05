@@ -30,7 +30,7 @@ Questions can be found in the `content/blog` - each question has a corresponding
 - [x] ECG Signal Analysis
 - [x] ATCG Sequence Analysis
 - [x] Western Blot Analysis
-- [ ] Delta-delta CT Analysis
+- [x] Delta-delta CT Analysis
 
 ### Miscellaneous
 
