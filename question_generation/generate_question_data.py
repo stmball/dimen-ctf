@@ -11,7 +11,8 @@ import pandas as pd
 import faker
 import numpy as np
 from scipy import stats
-from statsmodles.formula.api import ols
+from scipy.optimize import curve_fit
+from statsmodels.formula.api import ols
 import statsmodels as sm
 
 
@@ -346,6 +347,55 @@ def difficult_deltas():
         f.write(g34_dd_mean_ct)
 
 
+def stressful_surveys():
+
+    faker = faker.Faker()
+
+    names = [faker.name() for _ in range(100)]
+    data = np.random.randint(0, 5, (100, 10))
+
+    categories = [
+        "How stressful is your job?",
+        "How stressful is your commute?",
+        "How stressful is your home life?",
+        "How stressful is your social life?",
+        "How much do you sleep?",
+        "How much do you exercise?",
+        "How much do you drink?",
+        "How much do you smoke?",
+        "What is your drug use?",
+        "How much do you eat?",
+    ]
+
+    data = pd.DataFrame(data, columns=categories, index=names)
+
+    data.to_csv("./stressful_surveys.csv")
+
+    # Solution
+    stressed_insominacs = data.loc[
+        data["How stressful is your job?"] > 3 & data["How much do you sleep?"] < 3
+    ]
+
+    stressed_insominacs.to_csv("./stressful_surveys_sol.txt")
+
+
+def challenging_curves():
+
+    a = np.random.uniform(1, 2)
+    b = np.random.uniform(2, 5)
+    c = np.random.uniform(5, 10)
+
+    formula = lambda x: b * (a**x) + c
+
+    x = np.random.uniform(0, 10, 100)
+    data = pd.DataFrame({"x": x, "y": formula(x)})
+
+    data.to_csv("./challenging_curves.csv")
+
+    with open("./challenging_curves_sol.txt", "w") as f:
+        f.write(f"{a}, {b}, {c}")
+
+
 if __name__ == "__main__":
     expression_expedition()
     heartbeat_hero()
@@ -358,3 +408,6 @@ if __name__ == "__main__":
     tricky_tests()
     response_riddle()
     wicked_westerns()
+    difficult_deltas()
+    stressful_surveys()
+    challenging_curves()

@@ -34,8 +34,6 @@ Questions can be found in the `content/blog` - each question has a corresponding
 
 ### Miscellaneous
 
-- [ ] Survey Response Analysis
-- [ ] Curve Fitting
-- [ ] Standard Curve Cone Analysis
-- [ ] Serial Dilution Calculator
-- [ ] Hyper Ratiometric Analysis
+- [x] Survey Response Analysis
+- [x] Curve Fitting
+- [x] Serial Dilution Calculator
