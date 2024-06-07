@@ -120,30 +120,30 @@ def monkey_masses():
     pval = stats.ttest_ind(active_monkeys, inactive_monkeys)[1]
 
     with open("./monkey_masses_sol.txt", "w") as f:
-        f.write(pval)
+        f.write(str(pval))
 
 
 def sugar_squeeze_pt1():
 
     means = np.random.uniform(70, 150, 5)
 
-    data = np.random.normal(means, 10, (5, 100))
+    data = np.random.normal(means, 10, (100, 5))
 
     data = pd.DataFrame(data, columns=pd.Index([f"Group {i+ 1}" for i in range(5)]))
 
     data.to_csv("./sugar_squeeze_pt1.csv")
 
-    pval = stats.f_oneway(data.values)[1]
+    pval = stats.f_oneway(*data.values.T)[1]
 
     with open("./sugar_squeeze_pt1_sol.txt", "w") as f:
-        f.write(pval)
+        f.write(str(pval))
 
 
 def sugar_squeeze_pt2():
 
     means = np.random.uniform(70, 150, 25)
 
-    data = np.random.normal(means, 10, (25, 100))
+    data = np.random.normal(means, 10, (100, 25))
 
     sucrose_groups = [f"Group {(i % 5) + 1}" for i in range(25)]
     fructose_groups = [f"Group {(i // 5) + 1}" for i in range(25)]
@@ -155,13 +155,11 @@ def sugar_squeeze_pt2():
 
     data = pd.DataFrame(
         master_data,
-        columns=pd.Index(["Sucrose Group", "Fructose Group", "Weight (kg)"]),
+        columns=pd.Index(["Sucrose", "Fructose", "Weight"]),
     )
 
-    data.to_csv("./sugar_squeeze_pt2.csv")
-
     lm = ols(
-        "Weight ~ C(Sucrose_Group) * C(Fructose_Group) + C(Sucrose_Group):C(Fructose_Group)",
+        "Weight ~ C(Sucrose)*C(Fructose)",
         data,
     ).fit()
 
@@ -186,7 +184,7 @@ def drunk_dilemma():
     pval = stats.fisher_exact(values)[1]
 
     with open("./drunk_dilemma_sol.txt", "w") as f:
-        f.write(pval)
+        f.write(str(pval))
 
 
 def nebulous_nucleotides():
@@ -198,6 +196,8 @@ def nebulous_nucleotides():
     # Delete folder if it exists
     if data_folder.exists():
         shutil.rmtree(data_folder)
+
+    data_folder.mkdir(exist_ok=True)
 
     best_name = ""
     best_count = 0
@@ -277,15 +277,17 @@ def wicked_westerns():
 
     # Generate fake western data
     ladder = range(50, 250, 10)
-    points = np.random.choice(ladder).tolist()
+    points = np.random.choice(ladder, 10).tolist()
     question_gene = "PRDX"
 
     other_genes = np.random.choice(pd.read_csv("./genes.csv").to_numpy().flatten(), 9)
     housekeeper = 20
-    names = random.shuffle(other_genes.tolist().append(question_gene))
+
+    genes = other_genes.tolist() + [question_gene]
+
+    names = random.shuffle(genes)
     values = [housekeeper] + points
 
-    data = []
     housekeeper_values = np.random.normal(200, 20, 20)
     control_values = np.random.normal(np.random.uniform(10, 100), 20, (10, 10))
     upreg_values = np.random.normal(np.random.uniform(100, 150), 20, (10, 10))
@@ -293,7 +295,7 @@ def wicked_westerns():
     all_values = np.hstack([control_values, upreg_values])
     all_values = np.vstack([housekeeper_values, all_values])
 
-    all_values = {f"Cell {idx}": all_values[idx] for idx in range(20)}
+    all_values = {f"Cell {idx}": all_values[:, idx] for idx in range(20)}
 
     data_df = pd.DataFrame({"Gene": names, "Weights": values, **all_values})
 
@@ -332,7 +334,7 @@ def difficult_deltas():
 
     data = pd.DataFrame(alldata, index=index, columns=columns)
 
-    data.tocsv("./difficult_deltas.csv")
+    data.to_csv("./difficult_deltas.csv")
 
     g1_means = g1.mean(axis=0)
     g2_means = g2.mean(axis=0)
@@ -347,7 +349,7 @@ def difficult_deltas():
     g34_dd_mean_ct = g34_dd_ct.mean()
 
     with open("./difficult_deltas.txt", "w") as f:
-        f.write(g34_dd_mean_ct)
+        f.write(str(g34_dd_mean_ct))
 
 
 def stressful_surveys():
@@ -378,7 +380,7 @@ def stressful_surveys():
 
     # Solution
     stressed_insominacs = data.loc[
-        data["How stressful is your job?"] > 3 & data["How much do you sleep?"] < 3
+        (data["How stressful is your job?"] > 3) & (data["How much do you sleep?"] < 3)
     ]
 
     stressed_insominacs.to_csv("./stressful_surveys_sol.txt")
