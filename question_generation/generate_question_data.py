@@ -11,9 +11,8 @@ import pandas as pd
 import faker
 import numpy as np
 from scipy import stats
-from scipy.optimize import curve_fit
 from statsmodels.formula.api import ols
-import statsmodels as sm
+from statsmodels.stats.anova import anova_lm
 
 
 def expression_expedition():
@@ -27,7 +26,7 @@ def expression_expedition():
     means = np.tile(means, 10)
 
     means *= np.random.triangular(0.5, 1, 2, means.shape)
-    means = pd.DataFrame(means, columns=[f"Sample_{i}" for i in range(10)])
+    means = pd.DataFrame(means, columns=pd.Index([f"Sample_{i}" for i in range(10)]))
 
     # Choose 5 random genes
     means = pd.concat([data, means], axis=1)
@@ -73,7 +72,7 @@ def heartbeat_hero():
     data_folder.mkdir(exist_ok=True)
     mean_qts = {}
 
-    for i in range(10):
+    for _ in range(10):
 
         name = fak.name()
 
@@ -87,7 +86,7 @@ def heartbeat_hero():
 
         mean_qts[name] = mean_qt
 
-    qts = pd.DataFrame(mean_qts.items(), columns=["Name", "Mean_QT"])
+    qts = pd.DataFrame(mean_qts.items(), columns=pd.Index(["Name", "Mean_QT"]))
     qts = qts.sort_values("Mean_QT", ascending=False).head(1)
 
     # Zip heartbeat folder
@@ -130,7 +129,7 @@ def sugar_squeeze_pt1():
 
     data = np.random.normal(means, 10, (5, 100))
 
-    data = pd.DataFrame(data, columns=[f"Group {i+ 1}" for i in range(5)])
+    data = pd.DataFrame(data, columns=pd.Index([f"Group {i+ 1}" for i in range(5)]))
 
     data.to_csv("./sugar_squeeze_pt1.csv")
 
@@ -155,7 +154,8 @@ def sugar_squeeze_pt2():
             master_data.append([g1, g2, point])
 
     data = pd.DataFrame(
-        master_data, columns=["Sucrose Group", "Fructose Group", "Weight (kg)"]
+        master_data,
+        columns=pd.Index(["Sucrose Group", "Fructose Group", "Weight (kg)"]),
     )
 
     data.to_csv("./sugar_squeeze_pt2.csv")
@@ -165,7 +165,7 @@ def sugar_squeeze_pt2():
         data,
     ).fit()
 
-    table = sm.stats.anova_lm(lm, typ=2)
+    table = anova_lm(lm, typ=2)
 
     # Table to text
     table.to_csv("./sugar_squeeze_pt2_sol.txt", sep="\t")
@@ -176,12 +176,13 @@ def drunk_dilemma():
     values = np.random.uniform(0, 100, (2, 2))
 
     data = pd.DataFrame(
-        values, columns=["Sober", "Drinks"], index=["No Drugs", "Drugs"]
+        values,
+        columns=pd.Index(["Sober", "Drinks"]),
+        index=pd.Index(["No Drugs", "Drugs"]),
     )
 
     data.to_csv("./drunk_dilemma.csv")
 
-    # Chi squared contigency table test
     pval = stats.fisher_exact(values)[1]
 
     with open("./drunk_dilemma_sol.txt", "w") as f:
@@ -298,7 +299,6 @@ def wicked_westerns():
 
     data_df.to_csv("wicked_westerns.csv")
 
-    # TODO: Solution
     prdx = data_df.loc[data_df["Gene"] == "PRDX"].to_numpy()
     housekeeper = data_df.loc[data_df["Gene"] == "Housekeeper"].to_numpy()
 
@@ -320,12 +320,15 @@ def difficult_deltas():
 
     alldata = np.vstack([np.hstack([g1, g2]), np.hstack([g3, g4])])
 
-    columns = [f"Housekeeping {idx + 1}" for idx in range(5)] + [
-        f"Gene of interest {idx + 1}" for idx in range(5)
-    ]
-    index = [f"Control {idx + 1}" for idx in range(5)] + [
-        f"Treated {idx + 1}" for idx in range(5)
-    ]
+    columns = pd.Index(
+        [f"Housekeeping {idx + 1}" for idx in range(5)]
+        + [f"Gene of interest {idx + 1}" for idx in range(5)]
+    )
+
+    index = pd.Index(
+        [f"Control {idx + 1}" for idx in range(5)]
+        + [f"Treated {idx + 1}" for idx in range(5)]
+    )
 
     data = pd.DataFrame(alldata, index=index, columns=columns)
 
@@ -349,23 +352,25 @@ def difficult_deltas():
 
 def stressful_surveys():
 
-    faker = faker.Faker()
+    fak = faker.Faker()
 
-    names = [faker.name() for _ in range(100)]
+    names = pd.Index([fak.name() for _ in range(100)])
     data = np.random.randint(0, 5, (100, 10))
 
-    categories = [
-        "How stressful is your job?",
-        "How stressful is your commute?",
-        "How stressful is your home life?",
-        "How stressful is your social life?",
-        "How much do you sleep?",
-        "How much do you exercise?",
-        "How much do you drink?",
-        "How much do you smoke?",
-        "What is your drug use?",
-        "How much do you eat?",
-    ]
+    categories = pd.Index(
+        [
+            "How stressful is your job?",
+            "How stressful is your commute?",
+            "How stressful is your home life?",
+            "How stressful is your social life?",
+            "How much do you sleep?",
+            "How much do you exercise?",
+            "How much do you drink?",
+            "How much do you smoke?",
+            "What is your drug use?",
+            "How much do you eat?",
+        ]
+    )
 
     data = pd.DataFrame(data, columns=categories, index=names)
 
@@ -379,16 +384,18 @@ def stressful_surveys():
     stressed_insominacs.to_csv("./stressful_surveys_sol.txt")
 
 
+def formula(x, a, b, c):
+    return b * (a**x) + c
+
+
 def challenging_curves():
 
     a = np.random.uniform(1, 2)
     b = np.random.uniform(2, 5)
     c = np.random.uniform(5, 10)
 
-    formula = lambda x: b * (a**x) + c
-
     x = np.random.uniform(0, 10, 100)
-    data = pd.DataFrame({"x": x, "y": formula(x)})
+    data = pd.DataFrame({"x": x, "y": formula(x, a, b, c)})
 
     data.to_csv("./challenging_curves.csv")
 
