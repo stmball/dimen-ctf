@@ -20,7 +20,7 @@ const Bio = () => {
   return (
     <div className="bio">
       <p>
-        Welcome to the DiMeN DTP Data Treasure Hunt! Below re a set of
+        Welcome to the DiMeN DTP Data Treasure Hunt! Below are a set of
         challenges you will need to complete as a group. When you complete a
         challenge, you will need to submit your answer to the front of the room
         to one of the helpers, who will keep track of your team's score. The
