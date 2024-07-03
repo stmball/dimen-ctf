@@ -79,7 +79,7 @@ def heartbeat_hero():
         labels = ["P", "Q", "R", "S", "T"] * 100
         values = np.random.uniform(10, 100, len(labels))
 
-        mean_qt = np.mean([sum(values[i + 1 : i + 4]) for i in range(100)])
+        mean_qt = np.mean([sum(values[i + 1 : i + 5]) for i in range(100)])
 
         data = pd.DataFrame({"label": labels, "value": values})
         data.to_csv(data_folder / f"./{name}.csv", index=False)
@@ -285,7 +285,7 @@ def wicked_westerns():
 
     genes = other_genes.tolist() + [question_gene]
 
-    names = random.shuffle(genes)
+    random.shuffle(genes)
     values = [housekeeper] + points
 
     housekeeper_values = np.random.normal(200, 20, 20)
@@ -297,7 +297,7 @@ def wicked_westerns():
 
     all_values = {f"Cell {idx}": all_values[:, idx] for idx in range(20)}
 
-    data_df = pd.DataFrame({"Gene": names, "Weights": values, **all_values})
+    data_df = pd.DataFrame({"Gene": genes, "Weights": values, **all_values})
 
     data_df.to_csv("wicked_westerns.csv")
 
