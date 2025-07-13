@@ -1,7 +1,7 @@
 """
-    Scripts for generating questions for the DiMeN data challenge.
-    Each question should have two functions, one to generate the data for the question, and one to generate the solution.
-    Function names should be the same as the question.
+Scripts for generating questions for the DiMeN data challenge.
+Each question should have two functions, one to generate the data for the question, and one to generate the solution.
+Function names should be the same as the question.
 """
 
 from pathlib import Path
@@ -273,46 +273,6 @@ def response_riddle():
         f.write(f"KS P-value: {ks_pval}")
 
 
-def wicked_westerns():
-
-    # Generate fake western data
-    ladder = range(50, 250, 10)
-    points = np.random.choice(ladder, 10).tolist()
-    question_gene = "PRDX"
-
-    other_genes = np.random.choice(pd.read_csv("./genes.csv").to_numpy().flatten(), 9)
-    housekeeper = 20
-
-    genes = other_genes.tolist() + [question_gene]
-
-    random.shuffle(genes)
-    values = [housekeeper] + points
-
-    housekeeper_values = np.random.normal(200, 20, 20)
-    control_values = np.random.normal(np.random.uniform(10, 100), 20, (10, 10))
-    upreg_values = np.random.normal(np.random.uniform(100, 150), 20, (10, 10))
-
-    all_values = np.hstack([control_values, upreg_values])
-    all_values = np.vstack([housekeeper_values, all_values])
-
-    all_values = {f"Cell {idx}": all_values[:, idx] for idx in range(20)}
-
-    data_df = pd.DataFrame({"Gene": genes, "Weights": values, **all_values})
-
-    data_df.to_csv("wicked_westerns.csv")
-
-    prdx = data_df.loc[data_df["Gene"] == "PRDX"].to_numpy()
-    housekeeper = data_df.loc[data_df["Gene"] == "Housekeeper"].to_numpy()
-
-    ratio = prdx / housekeeper
-
-    mean_control_ratio = ratio[:5].mean()
-    mean_treated_ratio = ratio[5:].mean()
-
-    with open("./wicked_westerns", "w") as f:
-        f.write(f"{mean_treated_ratio/mean_control_ratio}")
-
-
 def difficult_deltas():
 
     g1 = np.random.normal(30, 2, (5, 5))
@@ -416,7 +376,6 @@ if __name__ == "__main__":
     performance_pulse()
     tricky_tests()
     response_riddle()
-    wicked_westerns()
     difficult_deltas()
     stressful_surveys()
     challenging_curves()
